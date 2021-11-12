@@ -128,6 +128,12 @@ int sys_moveto(void){
     if(argint(2,&y) < 0){
         return -1;
     }
+    int offset = 0xA0000 + 102600;
+
+    uchar *xMem = P2V(offset + 1);
+    uchar *yMem = P2V(offset + 5);
+    *xMem = x;
+    *yMem = y;
     return 0;
 }
 
@@ -135,6 +141,8 @@ int sys_lineto(void){
     int hdc;
     int x;
     int y;
+    int sX;
+    int sY;
 
     if(argint(0,&hdc) < 0){
         return -1;
@@ -145,6 +153,20 @@ int sys_lineto(void){
     if(argint(2,&y) < 0){
         return -1;
     }
+
+    int offset = 0xA0000 + 102600;
+
+    uchar *xMem = P2V(offset + 1);
+    uchar *yMem = P2V(offset + 5);
+    sX = *xMem;
+    sY = *yMem;
+
+    uchar *sPixel = P2V(0xA0000 + 320 * sY + sX);
+    *sPixel = 7;
+
+    uchar *ePixel = P2V(0xA0000 + 320 * y + x);
+    *ePixel = 7;
+    
 
     return 0;
 }
