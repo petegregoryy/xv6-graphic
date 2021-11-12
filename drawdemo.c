@@ -10,13 +10,12 @@ int main (int argc, char *argv[]){
         
         for (int y = 0; y < 200; y++)
         {
-            setpixel(0, x, y,colour);
-            
+            setpixel(0, x, y,colour);           
         }
         colour++;
-            if(colour == 60){
-                colour = 1;
-            }
+        if(colour == 60){
+            colour = 1;
+        }
     }
     
     /*
