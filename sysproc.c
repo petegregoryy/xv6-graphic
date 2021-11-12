@@ -93,6 +93,7 @@ int sys_setpixel(void){
     int hdc;
     int x;
     int y;
+    int col;
 
     if(argint(0,&hdc) < 0){
         return -1;
@@ -103,9 +104,12 @@ int sys_setpixel(void){
     if(argint(2,&y) < 0){
         return -1;
     }
+    if(argint(3,&col) < 0){
+        return -1;
+    }
 
     uchar *pixel = P2V(0xA0000 + 320 * y + x);
-    *pixel = 15;
+    *pixel = col;
     return 0;
 }
 
@@ -114,7 +118,8 @@ int sys_moveto(void){
     int x;
     int y;
 
-    if(argint(0,&hdc) < 0){
+    if (argint(0, &hdc) < 0)
+    {
         return -1;
     }
     if(argint(1,&x) < 0){

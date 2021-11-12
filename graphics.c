@@ -8,6 +8,6 @@ void clear320x200x256() {
 	//
 	// This function is called from videosetmode.
 
-	memset(P2V(0xA0000), 0, 112200);
+	memset(P2V(0xA0000), 0, (320*200));
 }
 

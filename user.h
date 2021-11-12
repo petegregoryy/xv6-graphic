@@ -26,7 +26,7 @@ int uptime(void);
 int getch(void);
 int shutdown(int);
 int setvideomode(int);
-int setpixel(int, int, int);
+int setpixel(int, int, int,uchar);
 int moveto(int, int, int);
 int lineto(int, int, int);
 
