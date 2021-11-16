@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     int colour = 1;
 
     moveto(0, 0, 0);
-    while (!getch())
+    while (1 == 1)
     {
         for (int i = 0; i < 16; i++)
         {
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
             flushscreen(0);
         }
     }
-    //getch();
+    getch();
     setvideomode(0x03);
     exit();
 }
