@@ -13,3 +13,5 @@ int abs(int N)
         return N;
     }
 }
+
+struct rect *CreateStruct(int, int, int, int);

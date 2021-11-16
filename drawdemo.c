@@ -1,5 +1,6 @@
 #include "types.h"
 #include "user.h"
+#include "funcs.h"
 
 struct rect
 {
@@ -11,29 +12,28 @@ struct rect
 
 int main(int argc, char *argv[])
 {
-    /*int colour = 15;
-    if (argc == 2)
-    {
-        colour = atoi(argv[1]);
-    }
-*/
     setvideomode(0x13);
 
-    struct rect rectangle;
-    rectangle.top = 10;
-    rectangle.left = 10;
-    rectangle.bottom = 100;
-    rectangle.right = 150;
+    struct rect *rectangle = CreateStruct(10, 10, 50, 50);
 
-    struct rect *rectPtr;
-    rectPtr = &rectangle;
     selectpen(0, 12);
-    fillrect(0, rectPtr);
-    selectpen(0, 15);
     moveto(0, 10, 10);
-    lineto(0, 150, 100);
+    fillrect(0, rectangle);
+    selectpen(0, 15);
+    lineto(0, 50, 50);
 
     getch();
     setvideomode(0x03);
     exit();
+}
+
+// Made for ease of rectangle creation
+struct rect *CreateStruct(int top, int left, int bottom, int right)
+{
+    struct rect *rectangle = malloc(sizeof(struct rect));
+    rectangle->top = top;
+    rectangle->left = left;
+    rectangle->bottom = bottom;
+    rectangle->right = right;
+    return rectangle;
 }
