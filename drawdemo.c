@@ -1,6 +1,14 @@
 #include "types.h"
 #include "user.h"
 
+struct rect
+{
+    int top;
+    int left;
+    int bottom;
+    int right;
+};
+
 int main(int argc, char *argv[])
 {
     /*int colour = 15;
@@ -11,20 +19,19 @@ int main(int argc, char *argv[])
 */
     setvideomode(0x13);
 
-    moveto(0, 100, 50);
-    setpencolour(17, 62, 30, 62);
-    for (int i = 0; i < 100; i += 3)
-    {
-        moveto(0, 25 + i, 10 + i);
-        selectpen(0, 17);
-        lineto(0, 125 + i, 10 + i);
-        //selectpen(0, 14);
-        lineto(0, 125 + i, 110 + i);
-        //selectpen(0, 13);
-        lineto(0, 25 + i, 110 + i);
-        //selectpen(0, 12);
-        lineto(0, 25 + i, 10 + i);
-    }
+    struct rect rectangle;
+    rectangle.top = 10;
+    rectangle.left = 10;
+    rectangle.bottom = 100;
+    rectangle.right = 150;
+
+    struct rect *rectPtr;
+    rectPtr = &rectangle;
+    selectpen(0, 12);
+    fillrect(0, rectPtr);
+    selectpen(0, 15);
+    moveto(0, 10, 10);
+    lineto(0, 150, 100);
 
     getch();
     setvideomode(0x03);

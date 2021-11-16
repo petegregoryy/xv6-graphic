@@ -44,7 +44,8 @@ my @syscalls = (
 				"ping",
 				"flushscreen",
 				"selectpen",
-				"setpencolour"
+				"setpencolour",
+				"fillrect"
 			   );
 
 my $i;			   

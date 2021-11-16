@@ -4,6 +4,14 @@
 #include "funcs.h"
 #include "x86.h"
 
+struct rect
+{
+	int top;
+	int left;
+	int bottom;
+	int right;
+};
+
 void clear320x200x256()
 {
 	// You need to put code to clear the video buffer here.  Initially,
@@ -246,5 +254,28 @@ int sys_setpencolour(void)
 	outb(0x3C9, r);
 	outb(0x3C9, g);
 	outb(0x3C9, b);
+	return 0;
+}
+
+int sys_fillrect(void)
+{
+	int hdc;
+	struct rect *rectangle;
+
+	if (argint(0, &hdc) < 0)
+	{
+		return -1;
+	}
+	if (argptr(1, (void *)&rectangle, sizeof(*rectangle)) < 0)
+	{
+		return -1;
+	}
+	cprintf("top: %d left: %d bottom: %d right: %d\n", rectangle->top, rectangle->left, rectangle->bottom, rectangle->right);
+	int memOff = rectangle->right - rectangle->left;
+	for (int i = rectangle->top; i < rectangle->bottom; i++)
+	{
+		memset(P2V(0xA0000 + 320 * i + rectangle->left), colourIndex, memOff);
+	}
+
 	return 0;
 }

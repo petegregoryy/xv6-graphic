@@ -1,5 +1,6 @@
 struct stat;
 struct rtcdate;
+struct rect;
 
 // system calls
 int fork(void);
@@ -38,6 +39,7 @@ int lineto(int, int, int);
 // Stage 2
 int selectpen(int, int);
 int setpencolour(int, int, int, int);
+int fillrect(int, struct rect *);
 
 // ulib.c
 int stat(const char *, struct stat *);
