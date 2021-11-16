@@ -29,6 +29,13 @@ int main (int argc, char *argv[]){
             setpixel(0, x, y,19);
         }
     }
+    for (int y = 0; y < 200; y++)
+    {
+        for (int x = 0; x < 320; x++)
+        { 
+            setpixel(0, x, y,12);
+        }
+    }
     getch();
     setvideomode(0x03);
     exit();
