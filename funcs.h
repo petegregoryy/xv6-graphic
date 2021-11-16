@@ -14,4 +14,4 @@ int abs(int N)
     }
 }
 
-struct rect *CreateStruct(int, int, int, int);
+struct rect *CreateRect(int, int, int, int);
