@@ -12,13 +12,18 @@ int main(int argc, char *argv[])
     setvideomode(0x13);
 
     moveto(0, 100, 50);
+    setpencolour(17, 62, 30, 62);
     for (int i = 0; i < 100; i += 3)
     {
         moveto(0, 25 + i, 10 + i);
-        lineto(0, 125 + i, 10 + i, 15);
-        lineto(0, 125 + i, 110 + i, 15);
-        lineto(0, 25 + i, 110 + i, 15);
-        lineto(0, 25 + i, 10 + i, 15);
+        selectpen(0, 17);
+        lineto(0, 125 + i, 10 + i);
+        //selectpen(0, 14);
+        lineto(0, 125 + i, 110 + i);
+        //selectpen(0, 13);
+        lineto(0, 25 + i, 110 + i);
+        //selectpen(0, 12);
+        lineto(0, 25 + i, 10 + i);
     }
 
     getch();

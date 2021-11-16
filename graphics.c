@@ -2,6 +2,7 @@
 #include "defs.h"
 #include "memlayout.h"
 #include "funcs.h"
+#include "x86.h"
 
 void clear320x200x256()
 {
@@ -13,13 +14,13 @@ void clear320x200x256()
 
 	memset(P2V(0xA0000), 0, (320 * 200));
 }
+int colourIndex = 15;
 
 int sys_setpixel(void)
 {
 	int hdc;
 	int x;
 	int y;
-	int col;
 
 	if (argint(0, &hdc) < 0)
 	{
@@ -33,13 +34,9 @@ int sys_setpixel(void)
 	{
 		return -1;
 	}
-	if (argint(3, &col) < 0)
-	{
-		return -1;
-	}
 
 	uchar *pixel = P2V(0xA0000 + 320 * y + x);
-	*pixel = col;
+	*pixel = colourIndex;
 	return 0;
 }
 
@@ -81,8 +78,6 @@ int sys_lineto(void)
 	int err;
 	int e2;
 
-	int col;
-
 	//cprintf("Move X = %d\n", x0);
 	//cprintf("Move Y = %d\n", y0);
 
@@ -95,10 +90,6 @@ int sys_lineto(void)
 		return -1;
 	}
 	if (argint(2, &y1) < 0)
-	{
-		return -1;
-	}
-	if (argint(3, &col) < 0)
 	{
 		return -1;
 	}
@@ -142,7 +133,7 @@ int sys_lineto(void)
 	while (x0 != x1 || y0 != y1)
 	{
 		uchar *pixel = P2V(0xA0000 + 320 * y0 + x0);
-		*pixel = col;
+		*pixel = colourIndex;
 		e2 = 2 * err;
 		//cprintf("x0: %d x1: %d y0: %d y1 %d\n", x0, x1, y0, y1);
 		//cprintf("e2: %d dy %d", e2, dy);
@@ -181,6 +172,79 @@ int sys_flushscreen(void)
 
 int sys_selectpen(void)
 {
+	int hdc;
+	int col;
+	int prevCol;
+	if (argint(0, &hdc) < 0)
+	{
+		return -1;
+	}
+	if (argint(1, &col) < 0)
+	{
+		return -1;
+	}
+	prevCol = colourIndex;
+	if (col < 0 || col > 255)
+	{
+		return -1;
+	}
+	else
+	{
+		colourIndex = col;
+		return prevCol;
+	}
+	return 0;
+}
 
+int sys_setpencolour(void)
+{
+	int index;
+	int r;
+	int g;
+	int b;
+
+	if (argint(0, &index) < 0)
+	{
+		return -1;
+	}
+	if (argint(1, &r) < 0)
+	{
+		return -1;
+	}
+	if (argint(2, &g) < 0)
+	{
+		return -1;
+	}
+	if (argint(3, &b) < 0)
+	{
+		return -1;
+	}
+	// Clip values;
+	if (index < 16)
+	{
+		index = 16;
+	}
+	else if (index > 255)
+	{
+		index = 255;
+	}
+	if (r > 63)
+	{
+		r = 63;
+	}
+	if (g > 63)
+	{
+		g = 63;
+	}
+	if (b > 63)
+	{
+		b = 63;
+	}
+
+	//Add colour to pallette
+	outb(0x3C8, index);
+	outb(0x3C9, r);
+	outb(0x3C9, g);
+	outb(0x3C9, b);
 	return 0;
 }

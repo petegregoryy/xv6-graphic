@@ -24,17 +24,20 @@ char *sbrk(int);
 int sleep(int);
 int uptime(void);
 int getch(void);
-int flushscreen(int);
 
 // My Sys Calls
 int shutdown(int);
 int setvideomode(int);
-int setpixel(int, int, int, uchar);
-int moveto(int, int, int);
-int lineto(int, int, int, int);
 int ping(void);
 int flushscreen(int);
+// Stage 1
+int setpixel(int, int, int);
+int moveto(int, int, int);
+int lineto(int, int, int);
+
+// Stage 2
 int selectpen(int, int);
+int setpencolour(int, int, int, int);
 
 // ulib.c
 int stat(const char *, struct stat *);

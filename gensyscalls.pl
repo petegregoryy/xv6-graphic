@@ -43,7 +43,8 @@ my @syscalls = (
 				"lineto",
 				"ping",
 				"flushscreen",
-				"selectpen"
+				"selectpen",
+				"setpencolour"
 			   );
 
 my $i;			   
