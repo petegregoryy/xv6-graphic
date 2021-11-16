@@ -21,6 +21,8 @@ int main(int argc, char *argv[])
     fillrect(0, rectangle);
     selectpen(0, 15);
     lineto(0, 50, 50);
+    selectpen(0, 13);
+    fillrect(0, CreateRect(10, 50, 50, 100));
 
     getch();
     setvideomode(0x03);
