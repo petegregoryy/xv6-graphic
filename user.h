@@ -32,7 +32,6 @@ int setvideomode(int);
 int setpixel(int, int, int, uchar);
 int moveto(int, int, int);
 int lineto(int, int, int, int);
-int bezierto(int, int, int);
 int ping(void);
 int flushscreen(int);
 

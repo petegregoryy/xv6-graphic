@@ -10,34 +10,9 @@ int main(int argc, char *argv[])
     }
 */
     setvideomode(0x13);
-    int startx = 0;
-    int starty = 0;
-    int endOffx = 20;
-    int endOffy = 200;
-    int colour = 1;
 
-    moveto(0, 0, 0);
-    while (1 == 1)
-    {
-        for (int i = 0; i < 16; i++)
-        {
-            moveto(0, startx, starty);
-            lineto(0, endOffx, endOffy, colour);
-            endOffx += 20;
-            colour++;
-            sleep(2);
-            flushscreen(0);
-        }
-        for (int i = 16; i > 0; i--)
-        {
-            moveto(0, startx, starty);
-            lineto(0, endOffx, endOffy, colour);
-            endOffx -= 20;
-            colour--;
-            sleep(2);
-            flushscreen(0);
-        }
-    }
+    moveto(0, 25, 25);
+
     getch();
     setvideomode(0x03);
     exit();
