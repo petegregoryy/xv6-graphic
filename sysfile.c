@@ -450,10 +450,6 @@ int sys_getch(void) {
 }
 
 int sys_ping(void){
-    int i;
-    if(argint(0, &i) < 0){
-        return -1;
-    };
-    cprintf("Pong! %d\n",i);
+    cprintf("Pong!\n");
     return 0;
 }
