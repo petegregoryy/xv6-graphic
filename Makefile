@@ -199,6 +199,7 @@ UPROGS=\
 	_zombie\
 	_shutdown\
 	_drawdemo\
+	_ping\
 
 fs.img: mkfs $(UPROGS)
 	./mkfs fs.img $(UPROGS)

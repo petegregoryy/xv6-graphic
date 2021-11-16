@@ -40,7 +40,9 @@ my @syscalls = (
 				"setvideomode",
 				"setpixel",
 				"moveto",
-				"lineto"
+				"lineto",
+				"ping",
+				"flushscreen"
 			   );
 
 my $i;			   
