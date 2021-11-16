@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "funcs.h"
 
 int sys_fork(void) {
     return fork();
@@ -153,41 +154,50 @@ int sys_moveto(void){
 
 int sys_lineto(void){
     int hdc;
-    int x;
-    int y;
+    int x0 = moveX;
+    int y0 = moveY;
+    int x1;
+    int y1;
+    int col = 15;
+
+    int dX, dY, p, x, y;
     //int sX;
     //int sY;
     //int dx, dy, p, x, y;
+    cprintf("Move X = %d\n", x0);
+    cprintf("Move Y = %d\n", y0);
 
     if(argint(0,&hdc) < 0){
         return -1;
     }
-    if(argint(1,&x) < 0){
+    if(argint(1,&x1) < 0){
         return -1;
     }
-    if(argint(2,&y) < 0){
+    if(argint(2,&y1) < 0){
         return -1;
     }
-
-
-  /*
-    dx = x1 - x0;
-    dy = y1 - y0;
-    x = x0;
-    y = y0;
-    p = 2 * dy - dx;
-    while(x < x1) {
-        if(p >= 0) {
-            setPixel(x, y, col);
-            y++;
-            p = p + 2 * dy - 2 * dx;
-        } else {
-            setPixel(x, y, col);
-            p = p + 2 * dy;
-            x++;
-        }
-    }*/
     
+    cprintf("Tar X = %d\n", x1);
+    cprintf("Tar Y = %d\n", y1);
+
+    dX = x1 - x0;
+    dY = y1 - y0;
+    p = 2 * dY - dX;
+    y = y0;
+    x = x0;
+
+    while(x <= x1) {
+        uchar *pixel = P2V(0xA0000 + 320 * y + x);
+        *pixel = col;
+        if(p > 0) {            
+            y++;
+            p = p - 2*dX;
+        }
+        p = p + 2 * dY;
+        x++;
+    }
+    moveX = x1;
+    moveY = y1;
     return 0;
 }
 
