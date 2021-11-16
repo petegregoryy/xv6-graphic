@@ -210,6 +210,25 @@ int sys_lineto(void)
     {
         return -1;
     }
+
+    // Clip values to screen bounds
+    if (x1 > 319)
+    {
+        x1 = 319;
+    }
+    else if (x1 < 0)
+    {
+        x1 = 0;
+    }
+    if (y1 > 199)
+    {
+        y1 = 199;
+    }
+    else if (y1 < 0)
+    {
+        y1 = 0;
+    }
+
     moveX = x1;
     moveY = y1;
 
