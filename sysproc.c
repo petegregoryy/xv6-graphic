@@ -156,14 +156,12 @@ int sys_lineto(void){
     int hdc;
     int x0 = moveX;
     int y0 = moveY;
-    int x1;
-    int y1;
-    int col = 15;
+    int x1, y1;
+    int dx, dy;
+    int sx, sy;
+    int err;
+    int e2;
 
-    int dX, dY, p, x, y;
-    //int sX;
-    //int sY;
-    //int dx, dy, p, x, y;
     cprintf("Move X = %d\n", x0);
     cprintf("Move Y = %d\n", y0);
 
@@ -176,28 +174,44 @@ int sys_lineto(void){
     if(argint(2,&y1) < 0){
         return -1;
     }
-    
-    cprintf("Tar X = %d\n", x1);
-    cprintf("Tar Y = %d\n", y1);
-
-    dX = x1 - x0;
-    dY = y1 - y0;
-    p = 2 * dY - dX;
-    y = y0;
-    x = x0;
-
-    while(x <= x1) {
-        uchar *pixel = P2V(0xA0000 + 320 * y + x);
-        *pixel = col;
-        if(p > 0) {            
-            y++;
-            p = p - 2*dX;
-        }
-        p = p + 2 * dY;
-        x++;
-    }
     moveX = x1;
     moveY = y1;
+
+    cprintf("Target X = %d\n", x1);
+    cprintf("Target Y = %d\n", y1);
+
+    dx = abs(x1 - x0);
+    sx = x0 < x1 ? 1 : -1;
+    dy = -abs(y1 - y0);
+    sy = y0 < y1 ? 1 : -1;
+
+    cprintf("dx: %d\n", dx);
+    cprintf("sx: %d\n", sx);
+    cprintf("dy: %d\n", dy);
+    cprintf("sy: %d\n", sy);
+    
+    err = dx + dy;
+    
+    
+
+    while(x0 != x1 && y0 != y1){
+        uchar *pixel = P2V(0xA0000 + 320 * y0 + x0);
+        *pixel = 15;
+        e2 = 2 * err;
+        if(e2 >= dy){
+            err += dy;
+            //cprintf("x0: %d sx: %d x0+=sx: %d\n", x0, sx,x0+sx); /// Comments used in debugging!
+            x0 += sx;
+        }
+        if(e2 <= dx){
+            err += dx;
+            //cprintf("y0: %d sy: %d y0+=sy: %d\n", y0, sy,y0+sy);
+            y0 += sy;
+        }
+    }
+    uchar *lastPixel = P2V(0xA0000 + 320 * y0 + x0);
+    *lastPixel = 15;
+
     return 0;
 }
 
