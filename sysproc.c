@@ -228,26 +228,30 @@ int sys_lineto(void)
 
     err = dx + dy;
 
-    while (x0 != x1 && y0 != y1)
+    while (x0 != x1 || y0 != y1)
     {
         uchar *pixel = P2V(0xA0000 + 320 * y0 + x0);
         *pixel = col;
         e2 = 2 * err;
+        //cprintf("x0: %d x1: %d y0: %d y1 %d\n", x0, x1, y0, y1);
+        //cprintf("e2: %d dy %d", e2, dy);
         if (e2 >= dy)
         {
             err += dy;
-            //cprintf("x0: %d sx: %d x0+=sx: %d\n", x0, sx,x0+sx); /// Comments used in debugging!
+            //cprintf("x0: %d sx: %d x0+=sx: %d\n", x0, sx, x0 + sx); /// Comments used in debugging!
             x0 += sx;
         }
+        //cprintf("e2: %d dx %d", e2, dx);
         if (e2 <= dx)
         {
             err += dx;
-            //cprintf("y0: %d sy: %d y0+=sy: %d\n", y0, sy,y0+sy);
+            //cprintf("y0: %d sy: %d y0+=sy: %d\n", y0, sy, y0 + sy);
             y0 += sy;
         }
     }
-    uchar *lastPixel = P2V(0xA0000 + 320 * y0 + x0);
-    *lastPixel = col;
+    //cprintf("x0: %d x1: %d y0: %d y1 %d\n", x0, x1, y0, y1);
+    //uchar *lastPixel = P2V(0xA0000 + 320 * y0 + x0);
+    //*lastPixel = col;
 
     return 0;
 }

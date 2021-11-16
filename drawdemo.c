@@ -11,8 +11,11 @@ int main(int argc, char *argv[])
 */
     setvideomode(0x13);
 
-    moveto(0, 25, 25);
-
+    moveto(0, 100, 50);
+    lineto(0, 200, 50, 15);
+    lineto(0, 200, 150, 15);
+    lineto(0, 100, 150, 15);
+    lineto(0, 100, 50, 15);
     getch();
     setvideomode(0x03);
     exit();
