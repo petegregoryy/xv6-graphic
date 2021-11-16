@@ -271,6 +271,7 @@ int sys_fillrect(void)
 		return -1;
 	}
 
+	// checks that rectangle is valid
 	if (rectangle->left > rectangle->right || rectangle->top > rectangle->bottom)
 	{
 		return -1;

@@ -5,4 +5,4 @@ Started assignment, added setpixel system call and added drawdemo user program.
 Added moveto system call, added flushscreen system call to paint entire screen chosen colour
 ----------------------------
 16/11/21 - 7 hours
-Fully added drawline, started on stage 2, implemented setpencolour and select pen. Implemented fillrect.
+Fully added drawline to complete Stage 1, implemented setpencolour and select pen. Implemented fillrect. Completed Stage 2
