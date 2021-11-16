@@ -448,3 +448,12 @@ int sys_pipe(void) {
 int sys_getch(void) {
     return consoleget();
 }
+
+int sys_ping(void){
+    int i;
+    if(argint(0, &i) < 0){
+        return -1;
+    };
+    cprintf("Pong! %d\n",i);
+    return 0;
+}

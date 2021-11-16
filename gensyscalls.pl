@@ -38,7 +38,11 @@ my @syscalls = (
                 "getch",
 				"shutdown",
 				"setvideomode",
-				"setpixel"
+				"setpixel",
+				"moveto",
+				"lineto",
+				"ping",
+				"flushscreen"
 			   );
 
 my $i;			   
