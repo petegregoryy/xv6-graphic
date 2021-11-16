@@ -277,7 +277,6 @@ int sys_fillrect(void)
 		return -1;
 	}
 
-	cprintf("top: %d left: %d bottom: %d right: %d\n", rectangle->top, rectangle->left, rectangle->bottom, rectangle->right);
 	int memOff = rectangle->right - rectangle->left;
 	for (int i = rectangle->top; i < rectangle->bottom; i++)
 	{
