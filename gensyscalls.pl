@@ -42,7 +42,8 @@ my @syscalls = (
 				"moveto",
 				"lineto",
 				"ping",
-				"flushscreen"
+				"flushscreen",
+				"selectpen"
 			   );
 
 my $i;			   

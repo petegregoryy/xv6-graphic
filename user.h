@@ -34,6 +34,7 @@ int moveto(int, int, int);
 int lineto(int, int, int, int);
 int ping(void);
 int flushscreen(int);
+int selectpen(int, int);
 
 // ulib.c
 int stat(const char *, struct stat *);
