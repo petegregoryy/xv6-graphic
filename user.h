@@ -24,11 +24,16 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int getch(void);
+int flushscreen(int);
+
+// My Sys Calls
 int shutdown(int);
 int setvideomode(int);
 int setpixel(int, int, int,uchar);
 int moveto(int, int, int);
 int lineto(int, int, int);
+int ping(int);
+int flushscreen(int);
 
 // ulib.c
 int stat(const char*, struct stat*);

@@ -67,6 +67,20 @@ int sys_sleep(void) {
     return 0;
 }
 
+// return how many clock tick interrupts have occurred
+// since start.
+int sys_uptime(void)
+{
+    uint xticks;
+
+    acquire(&tickslock);
+    xticks = ticks;
+    release(&tickslock);
+    return xticks;
+}
+
+// My Added Commands!
+
 int sys_shutdown(void){
     int n;
 
@@ -113,6 +127,9 @@ int sys_setpixel(void){
     return 0;
 }
 
+int moveX = 0;
+int moveY = 0;
+
 int sys_moveto(void){
     int hdc;
     int x;
@@ -128,6 +145,9 @@ int sys_moveto(void){
     if(argint(2,&y) < 0){
         return -1;
     }
+
+    moveX = x;
+    moveY = y;
     return 0;
 }
 
@@ -135,6 +155,9 @@ int sys_lineto(void){
     int hdc;
     int x;
     int y;
+    //int sX;
+    //int sY;
+    //int dx, dy, p, x, y;
 
     if(argint(0,&hdc) < 0){
         return -1;
@@ -146,17 +169,34 @@ int sys_lineto(void){
         return -1;
     }
 
+
+  /*
+    dx = x1 - x0;
+    dy = y1 - y0;
+    x = x0;
+    y = y0;
+    p = 2 * dy - dx;
+    while(x < x1) {
+        if(p >= 0) {
+            setPixel(x, y, col);
+            y++;
+            p = p + 2 * dy - 2 * dx;
+        } else {
+            setPixel(x, y, col);
+            p = p + 2 * dy;
+            x++;
+        }
+    }*/
+    
     return 0;
 }
 
-// return how many clock tick interrupts have occurred
-// since start.
-int sys_uptime(void)
-{
-    uint xticks;
+int sys_flushscreen(void){
+    int col;
 
-    acquire(&tickslock);
-    xticks = ticks;
-    release(&tickslock);
-    return xticks;
+    if(argint(0,&col) < 0){
+        return -1;
+    }
+    memset(P2V(0xA0000), col, (320*200));
+    return 0;
 }
