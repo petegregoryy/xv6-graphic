@@ -263,3 +263,8 @@ int sys_flushscreen(void)
     memset(P2V(0xA0000), col, (320 * 200));
     return 0;
 }
+
+int sys_bezierto(void)
+{
+    return 0;
+}
