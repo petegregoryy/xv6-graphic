@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 {
     
     setvideomode(0x13);
-
+    
     int paint1 = beginpaint(0);
     int paint2 = beginpaint(0);
     printf(0,"paint1: %d",paint1);
