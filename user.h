@@ -41,6 +41,10 @@ int selectpen(int, int);
 int setpencolour(int, int, int, int);
 int fillrect(int, struct rect *);
 
+// Stage 3
+int beginpaint(int);
+int endpaint(int);
+
 // ulib.c
 int stat(const char *, struct stat *);
 char *strcpy(char *, const char *);

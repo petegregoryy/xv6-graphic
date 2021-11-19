@@ -45,7 +45,9 @@ my @syscalls = (
 				"flushscreen",
 				"selectpen",
 				"setpencolour",
-				"fillrect"
+				"fillrect",
+				"beginpaint",
+				"endpaint"
 			   );
 
 my $i;			   
