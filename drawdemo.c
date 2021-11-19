@@ -12,7 +12,7 @@ struct rect
 
 int main(int argc, char *argv[])
 {
-    
+    //fork();
     setvideomode(0x13);
     
     int paint1 = beginpaint(0);
