@@ -14,7 +14,8 @@ int main(int argc, char *argv[])
 {
     
     setvideomode(0x13);
-
+    int hdc = beginpaint(0);
+    printf(0,"paint1: %d",hdc);
     int colour = 16;
     int rCol = 0;
     int gCol = 0;
@@ -26,8 +27,8 @@ int main(int argc, char *argv[])
         {
             rCol++;
             setpencolour(colour,rCol,gCol,bCol);
-            selectpen(0,colour);
-            fillrect(0, CreateRect(y,x,2+y,2+x));
+            selectpen(hdc,colour);
+            fillrect(hdc, CreateRect(y,x,2+y,2+x));
             colour++;
             if(colour > 255){
                 colour = 16;
@@ -48,7 +49,7 @@ int main(int argc, char *argv[])
             sleep(1);
         }        
     }    
-
+    endpaint(hdc);
     getch();
     setvideomode(0x03);
     exit();

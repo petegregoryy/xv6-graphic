@@ -201,6 +201,7 @@ UPROGS=\
 	_drawdemo\
 	_ping\
 	_colourdemo\
+	_hdctest\
 
 fs.img: mkfs $(UPROGS)
 	./mkfs fs.img $(UPROGS)
