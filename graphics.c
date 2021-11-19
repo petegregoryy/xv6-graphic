@@ -276,6 +276,18 @@ int sys_fillrect(void)
 	{
 		return -1;
 	}
+	if(rectangle->left < 0){
+		rectangle->left = 0;
+	}
+	if(rectangle->right > 319){
+		rectangle->right = 319;
+	}
+	if(rectangle->top < 0){
+		rectangle->top = 0;
+	}
+	if(rectangle->bottom > 199){
+		rectangle->bottom = 199;
+	}
 
 	int memOff = rectangle->right - rectangle->left;
 	for (int i = rectangle->top; i < rectangle->bottom; i++)

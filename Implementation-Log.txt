@@ -6,3 +6,6 @@ Added moveto system call, added flushscreen system call to paint entire screen c
 ----------------------------
 16/11/21 - 7 hours
 Fully added drawline to complete Stage 1, implemented setpencolour and select pen. Implemented fillrect. Completed Stage 2
+----------------------------
+19/11/21 - 1 hours
+Started stage 3, added begin paint syscall (no functionality)
