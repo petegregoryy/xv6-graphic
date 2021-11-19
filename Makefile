@@ -200,6 +200,7 @@ UPROGS=\
 	_shutdown\
 	_drawdemo\
 	_ping\
+	_colourdemo\
 
 fs.img: mkfs $(UPROGS)
 	./mkfs fs.img $(UPROGS)
