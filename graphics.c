@@ -16,7 +16,7 @@ struct hdc
 
 struct hdctable{
 	struct spinlock lock;
-	struct hdc devices[10];
+	struct hdc devices[100];
 };
 
 struct rect
@@ -329,7 +329,7 @@ int sys_fillrect(void)
 
 int sys_beginpaint(void){
 	int hwnd;
-	//acquire(&hdctable.lock);
+	
 	if(argint(0,&hwnd) < 0){
 		return -1;
 	}
@@ -340,24 +340,27 @@ int sys_beginpaint(void){
 	context.moveX = 0;
 	context.moveX = 0;*/
 
-	for (int i = 0; i < 10; i++)
+	acquire(&hdctable.lock);
+	int returnVal =  -1;
+	for (int i = 0; i < 100; i++)
 	{
-		if(devices[i].locked == 0){
+		if(hdctable.devices[i].locked == 0){
 			hdctable.devices[i].locked = 1;
-			//release(&hdctable.lock);
-			return i;
+			returnVal = i;
+			break;
 		}
 	}
-	//release(&hdctable.lock);
-	return -1;
+	release(&hdctable.lock);
+	return returnVal;
 }
 
 int sys_endpaint(void){
 	int hdc;
-	acquire(&hdctable.lock);
+	
 	if(argint(0,&hdc) < 0){
 		return -1;
 	}
+	acquire(&hdctable.lock);
 	devices[hdc].locked = 0;
 	release(&hdctable.lock);
 	return 0;
