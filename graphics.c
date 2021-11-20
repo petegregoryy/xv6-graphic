@@ -3,6 +3,21 @@
 #include "memlayout.h"
 #include "funcs.h"
 #include "x86.h"
+#include "graphics.h"
+#include "spinlock.h"
+
+struct hdc
+{
+	int locked;
+	int colourIndex;
+	int moveX;
+	int moveY;
+};
+
+struct hdctable{
+	struct spinlock lock;
+	struct hdc devices[100];
+};
 
 struct rect
 {
@@ -11,6 +26,8 @@ struct rect
 	int bottom;
 	int right;
 };
+
+struct hdctable hdctable = {};
 
 void clear320x200x256()
 {
@@ -22,7 +39,19 @@ void clear320x200x256()
 
 	memset(P2V(0xA0000), 0, (320 * 200));
 }
+
+void graphicsinit(void){
+	initlock(&hdctable.lock,"hdctable");
+}
+
+// Global Variables
+
+struct hdc devices[10];
+
 int colourIndex = 15;
+
+int moveX = 0;
+int moveY = 0;
 
 int sys_setpixel(void)
 {
@@ -44,12 +73,10 @@ int sys_setpixel(void)
 	}
 
 	uchar *pixel = P2V(0xA0000 + 320 * y + x);
-	*pixel = colourIndex;
+	*pixel = hdctable.devices[hdc].colourIndex;
 	return 0;
 }
 
-int moveX = 0;
-int moveY = 0;
 
 int sys_moveto(void)
 {
@@ -70,16 +97,15 @@ int sys_moveto(void)
 		return -1;
 	}
 
-	moveX = x;
-	moveY = y;
+	hdctable.devices[hdc].moveX = x;
+	hdctable.devices[hdc].moveY = y;
 	return 0;
 }
 
 int sys_lineto(void)
 {
 	int hdc;
-	int x0 = moveX;
-	int y0 = moveY;
+
 	int x1, y1;
 	int dx, dy;
 	int sx, sy;
@@ -102,6 +128,9 @@ int sys_lineto(void)
 		return -1;
 	}
 
+	int x0 = hdctable.devices[hdc].moveX;
+	int y0 = hdctable.devices[hdc].moveY;
+
 	// Clip values to screen bounds
 	if (x1 > 319)
 	{
@@ -120,8 +149,8 @@ int sys_lineto(void)
 		y1 = 0;
 	}
 
-	moveX = x1;
-	moveY = y1;
+	hdctable.devices[hdc].moveX = x1;
+	hdctable.devices[hdc].moveY = y1;
 
 	//cprintf("Target X = %d\n", x1);
 	//cprintf("Target Y = %d\n", y1);
@@ -141,7 +170,7 @@ int sys_lineto(void)
 	while (x0 != x1 || y0 != y1)
 	{
 		uchar *pixel = P2V(0xA0000 + 320 * y0 + x0);
-		*pixel = colourIndex;
+		*pixel = hdctable.devices[hdc].colourIndex;
 		e2 = 2 * err;
 		//cprintf("x0: %d x1: %d y0: %d y1 %d\n", x0, x1, y0, y1);
 		//cprintf("e2: %d dy %d", e2, dy);
@@ -191,14 +220,14 @@ int sys_selectpen(void)
 	{
 		return -1;
 	}
-	prevCol = colourIndex;
+	prevCol = hdctable.devices[hdc].colourIndex;
 	if (col < 0 || col > 255)
 	{
 		return -1;
 	}
 	else
 	{
-		colourIndex = col;
+		hdctable.devices[hdc].colourIndex = col;
 		return prevCol;
 	}
 	return 0;
@@ -292,8 +321,47 @@ int sys_fillrect(void)
 	int memOff = rectangle->right - rectangle->left;
 	for (int i = rectangle->top; i < rectangle->bottom; i++)
 	{
-		memset(P2V(0xA0000 + 320 * i + rectangle->left), colourIndex, memOff);
+		memset(P2V(0xA0000 + 320 * i + rectangle->left), hdctable.devices[hdc].colourIndex, memOff);
 	}
 
+	return 0;
+}
+
+int sys_beginpaint(void){
+	int hwnd;
+	
+	if(argint(0,&hwnd) < 0){
+		return -1;
+	}
+
+	/*struct hdc context;
+	context.locked = 1;
+	context.colourIndex = 15;
+	context.moveX = 0;
+	context.moveX = 0;*/
+
+	acquire(&hdctable.lock);
+	int returnVal =  -1;
+	for (int i = 0; i < 100; i++)
+	{
+		if(hdctable.devices[i].locked == 0){
+			hdctable.devices[i].locked = 1;
+			returnVal = i;
+			break;
+		}
+	}
+	release(&hdctable.lock);
+	return returnVal;
+}
+
+int sys_endpaint(void){
+	int hdc;
+	
+	if(argint(0,&hdc) < 0){
+		return -1;
+	}
+	acquire(&hdctable.lock);
+	devices[hdc].locked = 0;
+	release(&hdctable.lock);
 	return 0;
 }
