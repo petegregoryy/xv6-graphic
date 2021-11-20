@@ -203,7 +203,6 @@ UPROGS=\
 	_colourdemo\
 	_hdctest\
 	_forker\
-	_forkpaint\
 
 fs.img: mkfs $(UPROGS)
 	./mkfs fs.img $(UPROGS)
