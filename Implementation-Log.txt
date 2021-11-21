@@ -9,3 +9,6 @@ Fully added drawline to complete Stage 1, implemented setpencolour and select pe
 ----------------------------
 19/11/21 - 2 hours
 Started stage 3, added beginpaint and endpaint with global device context list storing all device contexts (max 10), currently only works in 1 process as i dont know how to start multiple.
+----------------------------
+20/11/21 - 2 hours
+Finished stage 3, added stage3demo to demonstrate locking in multiple processes
