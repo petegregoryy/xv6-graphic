@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "spinlock.h": "c"
+        "spinlock.h": "c",
+        "exception": "c",
+        "new": "c"
     }
 }

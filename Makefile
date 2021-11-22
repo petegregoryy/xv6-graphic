@@ -204,6 +204,7 @@ UPROGS=\
 	_hdctest\
 	_forker\
 	_stage3demo\
+	_drawimage\
 
 fs.img: mkfs $(UPROGS)
 	./mkfs fs.img $(UPROGS)
