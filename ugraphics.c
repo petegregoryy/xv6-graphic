@@ -1,11 +1,35 @@
 #include "types.h"
 #include "user.h"
 
+struct command {
+    int command;
+    int hdc;
+    int arg1;
+    int arg2;
+    int arg3;
+    int arg4;
+    int arg5;
+    int arg6;
+    int arg7;
+    int arg8;
+    struct rect* rect;
+};
+struct commandHolder{
+    struct command commands[100];
+};
 
 struct commandHolder commandHolder = {};
 
 void moveto(int hdc, int x, int y){
-    movetoSys(hdc,x,y);
+    int commandint = getempty();
+    printf(0,"Empty holder: %d\n",commandint);
+    commandHolder.commands[commandint].command=1;
+    commandHolder.commands[commandint].hdc = hdc;
+    commandHolder.commands[commandint].arg1 = x;
+    commandHolder.commands[commandint].arg2 = y;
+
+    executedraw(hdc,&commandHolder);
+    //movetoSys(hdc,x,y);
 }
 
 void setpixel(int hdc, int x, int y){

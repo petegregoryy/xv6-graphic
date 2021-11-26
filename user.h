@@ -1,22 +1,8 @@
 struct stat;
 struct rtcdate;
 struct rect;
+struct commandHolder;
 
-struct command {
-    int command;
-    int hdc;
-    int arg1;
-    int arg2;
-    int arg3;
-    int arg4;
-    int arg5;
-    int arg6;
-    int arg7;
-    int arg8;
-};
-struct commandHolder{
-    struct command commands[100];
-};
 
 // system calls
 int fork(void);

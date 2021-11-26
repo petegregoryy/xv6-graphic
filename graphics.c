@@ -378,5 +378,28 @@ int sys_endpaintSys(void){
 }
 
 int sys_executedraw(void){
+	int hdc;
+	struct commandHolder *cmdh;
+	
+	if (argptr(1, (void *)&cmdh, sizeof(*cmdh)) < 0)
+	{
+		return -1;
+	}
+	for (int i = 0; i < sizeof(cmdh->commands) / sizeof(struct command); i++)
+	{
+		hdc = cmdh->commands[i].hdc;
+		// MoveTo command
+		if(cmdh->commands[i].command == 1){
+			int x = cmdh->commands[i].arg1;
+			int y = cmdh->commands[i].arg2;
+			
+
+			hdctable.devices[hdc].moveX = x;
+			hdctable.devices[hdc].moveY = y;
+			return 0;
+		}
+	}
+	
+	
 	return 0;
 }
