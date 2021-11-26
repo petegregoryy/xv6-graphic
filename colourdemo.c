@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     
     setvideomode(0x13);
     int hdc = beginpaint(0);
-    printf(0,"paint1: %d",hdc);
+    //printf(0,"paint1: %d",hdc);
     int colour = 16;
     int rCol = 0;
     int gCol = 0;
