@@ -2,6 +2,22 @@ struct stat;
 struct rtcdate;
 struct rect;
 
+struct command {
+    int command;
+    int hdc;
+    int arg1;
+    int arg2;
+    int arg3;
+    int arg4;
+    int arg5;
+    int arg6;
+    int arg7;
+    int arg8;
+};
+struct commandHolder{
+    struct command commands[100];
+};
+
 // system calls
 int fork(void);
 int exit(void) __attribute__((noreturn));
@@ -32,18 +48,21 @@ int setvideomode(int);
 int ping(void);
 int flushscreen(int);
 // Stage 1
-int setpixel(int, int, int);
-int moveto(int, int, int);
-int lineto(int, int, int);
+int setpixelSys(int, int, int);
+int movetoSys(int, int, int);
+int linetoSys(int, int, int);
 
 // Stage 2
-int selectpen(int, int);
-int setpencolour(int, int, int, int);
-int fillrect(int, struct rect *);
+int selectpenSys(int, int);
+int setpencolourSys(int, int, int, int);
+int fillrectSys(int, struct rect *);
 
 // Stage 3
 int beginpaint(int);
-int endpaint(int);
+int endpaintSys(int);
+
+// Stage 4
+int executedraw(int,struct commandHolder *);
 
 // ulib.c
 int stat(const char *, struct stat *);
@@ -58,3 +77,13 @@ void *memset(void *, int, uint);
 void *malloc(uint);
 void free(void *);
 int atoi(const char *);
+
+// ugraphics.c
+void    moveto(int hdc,int x,int y);
+void    setpixel(int hdc, int x, int y);
+void    lineto(int hdc, int x, int y);
+void    fillrect(int hdc,struct rect * rect);
+void    endpaint(int hdc);
+void    selectpen(int hdc, int index);
+void    setpencolour(int index,int r,int g,int b);
+int     getempty();

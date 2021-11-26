@@ -27,6 +27,23 @@ struct rect
 	int right;
 };
 
+struct command {
+    int command;
+    int hdc;
+    int arg1;
+    int arg2;
+    int arg3;
+    int arg4;
+    int arg5;
+    int arg6;
+    int arg7;
+    int arg8;
+};
+
+struct commandHolder{
+    struct command commands[100];
+};
+
 struct hdctable hdctable = {};
 
 void clear320x200x256()
@@ -53,7 +70,7 @@ int colourIndex = 15;
 int moveX = 0;
 int moveY = 0;
 
-int sys_setpixel(void)
+int sys_setpixelSys(void)
 {
 	int hdc;
 	int x;
@@ -78,7 +95,7 @@ int sys_setpixel(void)
 }
 
 
-int sys_moveto(void)
+int sys_movetoSys(void)
 {
 	int hdc;
 	int x;
@@ -102,7 +119,7 @@ int sys_moveto(void)
 	return 0;
 }
 
-int sys_lineto(void)
+int sys_linetoSys(void)
 {
 	int hdc;
 
@@ -207,7 +224,7 @@ int sys_flushscreen(void)
 	return 0;
 }
 
-int sys_selectpen(void)
+int sys_selectpenSys(void)
 {
 	int hdc;
 	int col;
@@ -233,7 +250,7 @@ int sys_selectpen(void)
 	return 0;
 }
 
-int sys_setpencolour(void)
+int sys_setpencolourSys(void)
 {
 	int index;
 	int r;
@@ -286,7 +303,7 @@ int sys_setpencolour(void)
 	return 0;
 }
 
-int sys_fillrect(void)
+int sys_fillrectSys(void)
 {
 	int hdc;
 	struct rect *rectangle;
@@ -334,12 +351,6 @@ int sys_beginpaint(void){
 		return -1;
 	}
 
-	/*struct hdc context;
-	context.locked = 1;
-	context.colourIndex = 15;
-	context.moveX = 0;
-	context.moveX = 0;*/
-
 	acquire(&hdctable.lock);
 	int returnVal =  -1;
 	for (int i = 0; i < 100; i++)
@@ -354,7 +365,7 @@ int sys_beginpaint(void){
 	return returnVal;
 }
 
-int sys_endpaint(void){
+int sys_endpaintSys(void){
 	int hdc;
 	
 	if(argint(0,&hdc) < 0){
@@ -363,5 +374,9 @@ int sys_endpaint(void){
 	acquire(&hdctable.lock);
 	devices[hdc].locked = 0;
 	release(&hdctable.lock);
+	return 0;
+}
+
+int sys_executedraw(void){
 	return 0;
 }
