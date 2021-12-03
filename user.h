@@ -41,12 +41,12 @@ int flushscreen(int);
 
 // // Stage 2
 // int selectpenSys(int, int);
- int setpencolourSys(int, int, int, int);
+int setpencolour(int, int, int, int);
 // int fillrectSys(int, struct rect *);
 
 // Stage 3
 int beginpaint(int);
-int endpaintSys(int);
+//int endpaintSys(int);
 
 // Stage 4
 int executedraw(struct commandHolder *);
@@ -71,9 +71,8 @@ void    setpixel(int hdc, int x, int y);
 void    lineto(int hdc, int x, int y);
 void    fillrect(int hdc,struct rect * rect);
 void    endpaint(int hdc);
-void    selectpen(int hdc, int index);
-void    setpencolour(int index,int r,int g,int b);
+int     selectpen(int hdc, int index);
 void    execute();
-// int     pushToArray(int, struct command *);
+void    checkFull();
 int     getempty();
 

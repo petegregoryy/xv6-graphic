@@ -194,12 +194,10 @@ UPROGS=\
 	_rm\
 	_sh\
 	_stressfs\
-	_usertests\
 	_wc\
 	_zombie\
 	_shutdown\
 	_drawdemo\
-	_ping\
 	_colourdemo\
 	_stage3demo\
 

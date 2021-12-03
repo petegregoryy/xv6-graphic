@@ -42,6 +42,7 @@ struct command {
 };
 
 struct commandHolder{
+	int cmds;
     struct command commands[100];
 };
 
@@ -78,7 +79,7 @@ int sys_flushscreen(void)
 	return 0;
 }
 
-int sys_setpencolourSys(void)
+int sys_setpencolour(void)
 {
 	int index;
 	int r;
@@ -167,13 +168,15 @@ int sys_endpaintSys(void){
 int sys_executedraw(void){
 	struct commandHolder *cmdh;
 	
-	if (argptr(1, (void *)&cmdh, sizeof(*cmdh)) < 0)
+	if (argptr(0, (void *)&cmdh, sizeof(*cmdh)) < 0)
 	{
 		return -1;
 	}
-	for (int i = 0; i < sizeof(cmdh->commands) / sizeof(struct command); i++)
+	//cprintf("Number of commands in kernel: %d\n",cmdh->cmds);
+	for (int i = 0; i < cmdh->cmds; i++)
 	{
 		int hdc = cmdh->commands[i].hdc;
+
 		// MoveTo
 		if(cmdh->commands[i].command == 1){
 			int x = cmdh->commands[i].arg1;
@@ -201,9 +204,6 @@ int sys_executedraw(void){
 			int err;
 			int e2;
 
-			//cprintf("Move X = %d\n", x0);
-			//cprintf("Move Y = %d\n", y0);
-
 			int x0 = hdctable.devices[hdc].moveX;
 			int y0 = hdctable.devices[hdc].moveY;
 
@@ -228,18 +228,10 @@ int sys_executedraw(void){
 			hdctable.devices[hdc].moveX = x1;
 			hdctable.devices[hdc].moveY = y1;
 
-			//cprintf("Target X = %d\n", x1);
-			//cprintf("Target Y = %d\n", y1);
-
 			dx = abs(x1 - x0);
 			sx = x0 < x1 ? 1 : -1;
 			dy = -abs(y1 - y0);
 			sy = y0 < y1 ? 1 : -1;
-
-			//cprintf("dx: %d\n", dx);
-			//cprintf("sx: %d\n", sx);
-			//cprintf("dy: %d\n", dy);
-			//cprintf("sy: %d\n", sy);
 
 			err = dx + dy;
 
@@ -248,19 +240,16 @@ int sys_executedraw(void){
 				uchar *pixel = P2V(0xA0000 + 320 * y0 + x0);
 				*pixel = hdctable.devices[hdc].colourIndex;
 				e2 = 2 * err;
-				//cprintf("x0: %d x1: %d y0: %d y1 %d\n", x0, x1, y0, y1);
-				//cprintf("e2: %d dy %d", e2, dy);
+
 				if (e2 >= dy)
 				{
 					err += dy;
-					//cprintf("x0: %d sx: %d x0+=sx: %d\n", x0, sx, x0 + sx); /// Comments used in debugging!
 					x0 += sx;
 				}
-				//cprintf("e2: %d dx %d", e2, dx);
+				
 				if (e2 <= dx)
 				{
 					err += dx;
-					//cprintf("y0: %d sy: %d y0+=sy: %d\n", y0, sy, y0 + sy);
 					y0 += sy;
 				}
 			}
@@ -273,7 +262,7 @@ int sys_executedraw(void){
 			// checks that rectangle is valid
 			if (rectangle->left > rectangle->right || rectangle->top > rectangle->bottom)
 			{
-				//return -1;
+				cprintf("Invalid Rect!");
 			}
 			else{
 				if(rectangle->left < 0){
@@ -300,8 +289,7 @@ int sys_executedraw(void){
 		// SelectPen
 		else if(cmdh->commands[i].command == 5){
 			int col = cmdh->commands[i].arg1;
-			//int prevCol;
-			//prevCol = hdctable.devices[hdc].colourIndex;
+
 			if (col < 0 || col > 255)
 			{
 				//return -1;
@@ -310,11 +298,7 @@ int sys_executedraw(void){
 			else
 			{
 				hdctable.devices[hdc].colourIndex = col;
-				//return prevCol;
 			}
-		}
-		else if(cmdh->commands[i].command == 6){
-			
 		}
 	}
 	

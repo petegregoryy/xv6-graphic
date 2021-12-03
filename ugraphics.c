@@ -1,6 +1,5 @@
 #include "types.h"
 #include "user.h"
-
 struct command {
     int command;
     int hdc;
@@ -15,88 +14,86 @@ struct command {
     struct rect* rect;
 };
 struct commandHolder{
+    int cmds;
     struct command commands[100];
 };
 
 struct commandHolder commandHolder = {};
 
+int penCol = 0;
+
 void moveto(int hdc, int x, int y){
-    int commandint = getempty();
-    printf(0,"Empty holder: %d\n",commandint);
+    checkFull();
+    int commandint = commandHolder.cmds;
+    // printf(0,"Empty holder: %d\n",commandint);
     commandHolder.commands[commandint].command=1;
     commandHolder.commands[commandint].hdc = hdc;
     commandHolder.commands[commandint].arg1 = x;
     commandHolder.commands[commandint].arg2 = y;
-
-    //pushToArray(commandint,&commandHolder);
-    //movetoSys(hdc,x,y);
+    // printf(0, "Added moveto Instruction\n");
+    commandHolder.cmds++;
 }
 
 void setpixel(int hdc, int x, int y){
-    int index = getempty();
+    checkFull();
+    int index = commandHolder.cmds;
     commandHolder.commands[index].command=2;
     commandHolder.commands[index].hdc= hdc;
     commandHolder.commands[index].arg1 = x;
     commandHolder.commands[index].arg2 = y;
-
-    //pushToArray(index,&commandHolder);
-    //setpixelSys(hdc,x,y);
+    commandHolder.cmds++;
+    // printf(0, "Added Setpixel Instruction\n");
+    
 }
 
 void lineto(int hdc, int x, int y){
-    int index = getempty();
+    checkFull();
+    int index = commandHolder.cmds;
     commandHolder.commands[index].command=3;
     commandHolder.commands[index].hdc= hdc;
     commandHolder.commands[index].arg1 = x;
     commandHolder.commands[index].arg2 = y;
-
-    //pushToArray(index,&commandHolder);
-    //linetoSys(hdc,x,y);
+    commandHolder.cmds++;
+    // printf(0, "Added lineto Instruction\n");
+    
 }
 void fillrect(int hdc, struct rect* rect){
-    int index = getempty();
+    checkFull();
+    int index = commandHolder.cmds;
     commandHolder.commands[index].command=4;
     commandHolder.commands[index].hdc= hdc;
     commandHolder.commands[index].rect = rect;
-
-    //pushToArray(index,&commandHolder);
-    //fillrectSys(hdc,rect);
+    commandHolder.cmds++;
+    // printf(0, "Added fillrect Instruction\n");
+    
 }
 
-void selectpen(int hdc, int penIndex){
-    int index = getempty();
+int selectpen(int hdc, int penIndex){
+    checkFull();
+    int index = commandHolder.cmds;
+    int prevCol = penCol;
+    penCol = prevCol;
     commandHolder.commands[index].command=5;
     commandHolder.commands[index].hdc= hdc;
     commandHolder.commands[index].arg1 = penIndex;
-
-    //pushToArray(index,&commandHolder);
-    //selectpenSys(hdc,index);
+    commandHolder.cmds++;
+    //printf(0, "Added selectpen Instruction\n");
+    return penCol;
 }
 
 void endpaint(int hdc){
     execute();
 }
 
-void setpencolour(int index,int r,int b, int g){
-    setpencolourSys(index,r,g,b);
-}
 
-
-int getempty(){
-    for (int i = 0; i < 100; i++)
-    {
-        if(commandHolder.commands[i].command == 0){
-            return i;
-        }
+void checkFull(){
+    if(commandHolder.cmds >= 100){
+        execute();
+        commandHolder.cmds = 0;
     }
-    return -1;
 }
-
-// int pushToArray(int index, struct command* cmd){
-//     commandHolder.commands[index] = *cmd;
-//     return 0;
-// }
 
 void execute(){
+    //printf(0, "Number of Commands in Execute: %d\n",commandHolder.cmds);
     executedraw(&commandHolder);
 }

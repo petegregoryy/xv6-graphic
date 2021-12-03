@@ -40,9 +40,8 @@ my @syscalls = (
 				"setvideomode",
 				"ping",
 				"flushscreen",
-				"setpencolourSys",
+				"setpencolour",
 				"beginpaint",
-				"endpaintSys",
 				"executedraw"
 			   );
 
