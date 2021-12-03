@@ -199,6 +199,8 @@ UPROGS=\
 	_shutdown\
 	_drawdemo\
 	_colourdemo\
+	_stage1demo\
+	_stage2demo\
 	_stage3demo\
 
 fs.img: mkfs $(UPROGS)

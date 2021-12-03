@@ -48,6 +48,8 @@ struct commandHolder{
 
 struct hdctable hdctable = {};
 
+
+
 void clear320x200x256()
 {
 	// You need to put code to clear the video buffer here.  Initially,
@@ -57,10 +59,15 @@ void clear320x200x256()
 	// This function is called from videosetmode.
 
 	memset(P2V(0xA0000), 0, (320 * 200));
+	
 }
 
 void graphicsinit(void){
 	initlock(&hdctable.lock,"hdctable");
+	for (int i = 0; i < 100; i++)
+	{
+		hdctable.devices[i].colourIndex = 15;
+	}
 }
 
 // Global Variables
@@ -81,6 +88,7 @@ int sys_flushscreen(void)
 
 int sys_setpencolour(void)
 {
+	acquireconslock();
 	int index;
 	int r;
 	int g;
@@ -129,12 +137,13 @@ int sys_setpencolour(void)
 	outb(0x3C9, r);
 	outb(0x3C9, g);
 	outb(0x3C9, b);
+	releaseconslock();
 	return 0;
 }
 
 int sys_beginpaint(void){
 	int hwnd;
-	
+	acquireconslock();
 	if(argint(0,&hwnd) < 0){
 		return -1;
 	}
@@ -150,20 +159,10 @@ int sys_beginpaint(void){
 		}
 	}
 	release(&hdctable.lock);
+	releaseconslock();
 	return returnVal;
 }
 
-int sys_endpaintSys(void){
-	int hdc;
-	
-	if(argint(0,&hdc) < 0){
-		return -1;
-	}
-	acquire(&hdctable.lock);
-	devices[hdc].locked = 0;
-	release(&hdctable.lock);
-	return 0;
-}
 
 int sys_executedraw(void){
 	struct commandHolder *cmdh;

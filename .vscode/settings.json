@@ -4,6 +4,7 @@
         "exception": "c",
         "new": "c",
         "funcs.h": "c",
-        "user.h": "c"
+        "user.h": "c",
+        "memlayout.h": "c"
     }
 }
