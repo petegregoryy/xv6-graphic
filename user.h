@@ -2,6 +2,7 @@ struct stat;
 struct rtcdate;
 struct rect;
 struct commandHolder;
+struct command;
 
 
 // system calls
@@ -34,21 +35,21 @@ int setvideomode(int);
 int ping(void);
 int flushscreen(int);
 // Stage 1
-int setpixelSys(int, int, int);
-int movetoSys(int, int, int);
-int linetoSys(int, int, int);
+// int setpixelSys(int, int, int);
+// int movetoSys(int, int, int);
+// int linetoSys(int, int, int);
 
-// Stage 2
-int selectpenSys(int, int);
-int setpencolourSys(int, int, int, int);
-int fillrectSys(int, struct rect *);
+// // Stage 2
+// int selectpenSys(int, int);
+ int setpencolourSys(int, int, int, int);
+// int fillrectSys(int, struct rect *);
 
 // Stage 3
 int beginpaint(int);
 int endpaintSys(int);
 
 // Stage 4
-int executedraw(int,struct commandHolder *);
+int executedraw(struct commandHolder *);
 
 // ulib.c
 int stat(const char *, struct stat *);
@@ -72,4 +73,7 @@ void    fillrect(int hdc,struct rect * rect);
 void    endpaint(int hdc);
 void    selectpen(int hdc, int index);
 void    setpencolour(int index,int r,int g,int b);
+void    execute();
+// int     pushToArray(int, struct command *);
 int     getempty();
+

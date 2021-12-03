@@ -28,32 +28,59 @@ void moveto(int hdc, int x, int y){
     commandHolder.commands[commandint].arg1 = x;
     commandHolder.commands[commandint].arg2 = y;
 
-    executedraw(hdc,&commandHolder);
+    //pushToArray(commandint,&commandHolder);
     //movetoSys(hdc,x,y);
 }
 
 void setpixel(int hdc, int x, int y){
-    setpixelSys(hdc,x,y);
+    int index = getempty();
+    commandHolder.commands[index].command=2;
+    commandHolder.commands[index].hdc= hdc;
+    commandHolder.commands[index].arg1 = x;
+    commandHolder.commands[index].arg2 = y;
+
+    //pushToArray(index,&commandHolder);
+    //setpixelSys(hdc,x,y);
 }
 
 void lineto(int hdc, int x, int y){
-    linetoSys(hdc,x,y);
+    int index = getempty();
+    commandHolder.commands[index].command=3;
+    commandHolder.commands[index].hdc= hdc;
+    commandHolder.commands[index].arg1 = x;
+    commandHolder.commands[index].arg2 = y;
+
+    //pushToArray(index,&commandHolder);
+    //linetoSys(hdc,x,y);
 }
 void fillrect(int hdc, struct rect* rect){
-    fillrectSys(hdc,rect);
+    int index = getempty();
+    commandHolder.commands[index].command=4;
+    commandHolder.commands[index].hdc= hdc;
+    commandHolder.commands[index].rect = rect;
+
+    //pushToArray(index,&commandHolder);
+    //fillrectSys(hdc,rect);
 }
 
-void selectpen(int hdc, int index){
-    selectpenSys(hdc,index);
+void selectpen(int hdc, int penIndex){
+    int index = getempty();
+    commandHolder.commands[index].command=5;
+    commandHolder.commands[index].hdc= hdc;
+    commandHolder.commands[index].arg1 = penIndex;
+
+    //pushToArray(index,&commandHolder);
+    //selectpenSys(hdc,index);
 }
 
 void endpaint(int hdc){
-    endpaintSys(hdc);
+    execute();
 }
 
 void setpencolour(int index,int r,int b, int g){
     setpencolourSys(index,r,g,b);
 }
+
 
 int getempty(){
     for (int i = 0; i < 100; i++)
@@ -63,4 +90,13 @@ int getempty(){
         }
     }
     return -1;
+}
+
+// int pushToArray(int index, struct command* cmd){
+//     commandHolder.commands[index] = *cmd;
+//     return 0;
+// }
+
+void execute(){
+    executedraw(&commandHolder);
 }
