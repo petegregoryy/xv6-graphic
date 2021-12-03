@@ -174,6 +174,7 @@ int sys_executedraw(void){
 	//cprintf("Number of commands in kernel: %d\n",cmdh->cmds);
 	for (int i = 0; i < cmdh->cmds; i++)
 	{
+		acquireconslock();
 		int hdc = cmdh->commands[i].hdc;
 
 		// MoveTo
@@ -299,6 +300,7 @@ int sys_executedraw(void){
 				hdctable.devices[hdc].colourIndex = col;
 			}
 		}
+		releaseconslock();
 	}
 	
 	
