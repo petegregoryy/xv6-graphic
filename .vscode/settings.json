@@ -2,6 +2,8 @@
     "files.associations": {
         "spinlock.h": "c",
         "exception": "c",
-        "new": "c"
+        "new": "c",
+        "funcs.h": "c",
+        "user.h": "c"
     }
 }

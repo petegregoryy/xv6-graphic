@@ -12,3 +12,8 @@ Started stage 3, added beginpaint and endpaint with global device context list s
 ----------------------------
 20/11/21 - 2 hours
 Finished stage 3, added stage3demo to demonstrate locking in multiple processes
+----------------------------
+26/11/21 - 2 hours
+Added ugraphics user library, rerouted syscalls through ugraphics before calling system
+----------------------------
+3/12/21 - 2 hours

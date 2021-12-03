@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
         exit();
     }
     else if(pid == 0){
-        printf(0,"CHILD\n");
+        //printf(0,"CHILD\n");
         int paint1 = beginpaint(0);
         int paint2 = beginpaint(0);
 
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     else if(pid > 0)
     {
         sleep(1);                       // Gives the first process enough time to write CHILD, then writes parent. Otherwise the processes write simultaneously and output "CPHarIeLnDt".
-        printf(0,"Parent\n");
+        //printf(0,"Parent\n");
         int paint1 = beginpaint(0);
         int paint2 = beginpaint(0);
 

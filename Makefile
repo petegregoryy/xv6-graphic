@@ -159,7 +159,7 @@ vectors.S: vectors.pl
 	# chmod +x vectors.pl
 	./vectors.pl > vectors.S
 
-ULIB = ulib.o usys.o printf.o umalloc.o
+ULIB = ulib.o usys.o printf.o umalloc.o ugraphics.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -194,17 +194,12 @@ UPROGS=\
 	_rm\
 	_sh\
 	_stressfs\
-	_usertests\
 	_wc\
 	_zombie\
 	_shutdown\
 	_drawdemo\
-	_ping\
 	_colourdemo\
-	_hdctest\
-	_forker\
 	_stage3demo\
-	_drawimage\
 
 fs.img: mkfs $(UPROGS)
 	./mkfs fs.img $(UPROGS)
