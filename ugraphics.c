@@ -66,13 +66,15 @@ void fillrect(int hdc, struct rect* rect){
 int selectpen(int hdc, int penIndex){
     checkFull();
     int index = commandHolder.cmds;
+    
+    // Saves previous colour of pen, allows for returning of pen colour as specified.
     int prevCol = penCol;
-    penCol = prevCol;
+    
     commandHolder.commands[index].command=5;
     commandHolder.commands[index].hdc= hdc;
     commandHolder.commands[index].arg1 = penIndex;
     commandHolder.cmds++;
-    return penCol;
+    return prevCol;
 }
 
 void endpaint(int hdc){
