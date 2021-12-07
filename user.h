@@ -72,7 +72,5 @@ void    lineto(int hdc, int x, int y);
 void    fillrect(int hdc,struct rect * rect);
 void    endpaint(int hdc);
 int     selectpen(int hdc, int index);
-void    execute();
-void    checkFull();
-int     getempty();
-
+void    execute(void);
+void    checkFull(void);

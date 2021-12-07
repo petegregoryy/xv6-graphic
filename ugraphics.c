@@ -101,4 +101,5 @@ void checkFull(){
 // endpaint was called, so if the command holder filled up then it would only draw the first 100 instructions.
 void execute(){
     executedraw(&commandHolder);
+    commandHolder.cmds = 0;
 }

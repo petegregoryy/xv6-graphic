@@ -5,6 +5,9 @@
         "new": "c",
         "funcs.h": "c",
         "user.h": "c",
-        "memlayout.h": "c"
+        "memlayout.h": "c",
+        "kbd.h": "c",
+        "types.h": "c",
+        "defs.h": "c"
     }
 }
