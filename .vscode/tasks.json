@@ -10,7 +10,7 @@
         "problemMatcher": [],
         "group": {
             "kind": "build",
-            "isDefault": true
+            "isDefault": false
         }
     },
     {
@@ -18,6 +18,16 @@
         "type": "shell",
         "command": "make qemu",
         "problemMatcher": []
+    },
+    {
+        "label": "Clean, Build and Run Xv6 under QEMU",
+        "type": "shell",
+        "command": "make clean && make && make qemu",
+        "problemMatcher": [],
+        "group": {
+            "kind": "test",
+            "isDefault": true
+        }
     },
     {
         "label": "Run Xv6 under QEMU for debugging",

@@ -52,14 +52,7 @@ struct hdctable hdctable = {};
 
 void clear320x200x256()
 {
-	// You need to put code to clear the video buffer here.  Initially,
-	// you might just set each pixel to black in a nested loop, but think
-	// about faster ways to do it.
-	//
-	// This function is called from videosetmode.
-
 	memset(P2V(0xA0000), 0, (320 * 200));
-	
 }
 
 void graphicsinit(void){
@@ -88,7 +81,6 @@ int sys_flushscreen(void)
 
 int sys_setpencolour(void)
 {
-	acquireconslock();
 	int index;
 	int r;
 	int g;
@@ -137,13 +129,11 @@ int sys_setpencolour(void)
 	outb(0x3C9, r);
 	outb(0x3C9, g);
 	outb(0x3C9, b);
-	releaseconslock();
 	return 0;
 }
 
 int sys_beginpaint(void){
 	int hwnd;
-	acquireconslock();
 	if(argint(0,&hwnd) < 0){
 		return -1;
 	}
@@ -159,7 +149,6 @@ int sys_beginpaint(void){
 		}
 	}
 	release(&hdctable.lock);
-	releaseconslock();
 	return returnVal;
 }
 
@@ -174,7 +163,6 @@ int sys_executedraw(void){
 	//cprintf("Number of commands in kernel: %d\n",cmdh->cmds);
 	for (int i = 0; i < cmdh->cmds; i++)
 	{
-		acquireconslock();
 		int hdc = cmdh->commands[i].hdc;
 
 		// MoveTo
@@ -300,7 +288,6 @@ int sys_executedraw(void){
 				hdctable.devices[hdc].colourIndex = col;
 			}
 		}
-		releaseconslock();
 	}
 	
 	
