@@ -85,7 +85,7 @@ int sys_setpencolour(void)
 	int r;
 	int g;
 	int b;
-
+	
 	if (argint(0, &index) < 0)
 	{
 		return -1;
@@ -102,6 +102,7 @@ int sys_setpencolour(void)
 	{
 		return -1;
 	}
+	acquire(&hdctable.lock);
 	// Clip values;
 	if (index < 16)
 	{
@@ -129,6 +130,7 @@ int sys_setpencolour(void)
 	outb(0x3C9, r);
 	outb(0x3C9, g);
 	outb(0x3C9, b);
+	release(&hdctable.lock);
 	return 0;
 }
 
