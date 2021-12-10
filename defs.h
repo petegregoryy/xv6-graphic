@@ -62,6 +62,7 @@ int             writei(struct inode*, char*, uint, uint);
 void            clear320x200x256();
 void            clear640x400x16();
 void            graphicsinit();
+void            printbinary(int);
 
 // ide.c
 void            ideinit(void);

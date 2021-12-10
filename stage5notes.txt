@@ -1,0 +1,2 @@
+divide x and y by 8 for byte in plane
+x and y modulus 8 fpr bit in byte
