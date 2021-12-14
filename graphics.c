@@ -55,6 +55,14 @@ void clear320x200x256()
 	memset(P2V(0xA0000), 0, (320 * 200));
 }
 
+void clear640x400x16(){
+	for (int i = 0; i < 4; i++)
+	{
+		setplane(i);
+		memset(getframebufferbase(),0,((640*480)/8));	
+	}	
+}
+
 void graphicsinit(void){
 	initlock(&hdctable.lock,"hdctable");
 	for (int i = 0; i < 100; i++)
@@ -181,8 +189,40 @@ int sys_executedraw(void){
 			int x = cmdh->commands[i].arg1;
 			int y = cmdh->commands[i].arg2;
 
-			uchar *pixel = P2V(0xA0000 + 320 * y + x);
-			*pixel = hdctable.devices[hdc].colourIndex;
+
+			if(getcurrentvideomode() == 0x12){
+				int index = 640*y+x;
+					int planeByteIndex = index / 8;
+					int planeBitIndex = index % 8;
+
+					// convert 2d coordinates into 1d index
+					// divide by 8 to get real offset
+					// modulo by 8 to get the individual bit offset
+
+					int shiftedBit = 1 << planeBitIndex;
+
+					cprintf("X: %d Y: %d\n",x,y);
+					for (int i = 0; i < 4; i++)
+					{
+						setplane(i);
+						cprintf("Plane %d\n",i);
+						uchar *pixel = getframebufferbase() + planeByteIndex;
+						//uchar pixelByte = *pixel;
+						cprintf("pixel val: %d ",*pixel);
+						printbinary(*pixel);
+						*pixel = *pixel | shiftedBit;
+						cprintf("shifted: %d ",shiftedBit);
+						printbinary(shiftedBit);
+						cprintf("OR'd val: %d ",*pixel);
+						printbinary(*pixel);
+						
+					}
+					cprintf("\n");
+			}
+			else if(getcurrentvideomode() == 0x13){
+				uchar *pixel = P2V(0xA0000 + 320 * y + x);
+				*pixel = hdctable.devices[hdc].colourIndex;
+			}
 		}
 		// LineTo
 		else if(cmdh->commands[i].command == 3){
@@ -198,21 +238,41 @@ int sys_executedraw(void){
 			int y0 = hdctable.devices[hdc].moveY;
 
 			// Clip values to screen bounds
-			if (x1 > 319)
-			{
-				x1 = 319;
+			if(getcurrentvideomode() == 0x13){
+				if (x1 > 319)
+				{
+					x1 = 319;
+				}
+				else if (x1 < 0)
+				{
+					x1 = 0;
+				}
+				if (y1 > 199)
+				{
+					y1 = 199;
+				}
+				else if (y1 < 0)
+				{
+					y1 = 0;
+				}
 			}
-			else if (x1 < 0)
-			{
-				x1 = 0;
-			}
-			if (y1 > 199)
-			{
-				y1 = 199;
-			}
-			else if (y1 < 0)
-			{
-				y1 = 0;
+			else if(getcurrentvideomode() == 0x12){
+				if (x1 > 639)
+				{
+					x1 = 639;
+				}
+				else if (x1 < 0)
+				{
+					x1 = 0;
+				}
+				if (y1 > 479)
+				{
+					y1 = 479;
+				}
+				else if (y1 < 0)
+				{
+					y1 = 0;
+				}
 			}
 
 			hdctable.devices[hdc].moveX = x1;
@@ -227,8 +287,44 @@ int sys_executedraw(void){
 
 			while (x0 != x1 || y0 != y1)
 			{
-				uchar *pixel = P2V(0xA0000 + 320 * y0 + x0);
-				*pixel = hdctable.devices[hdc].colourIndex;
+				if(getcurrentvideomode() == 0x12){
+					
+					
+					int index = 640*y0+x0;
+					int planeByteIndex = index / 8;
+					int planeBitIndex = index % 8;
+
+					// convert 2d coordinates into 1d index
+					// divide by 8 to get real offset
+					// modulo by 8 to get the individual bit offset
+
+					int shiftedBit = 1 << planeBitIndex;
+
+					cprintf("X: %d Y: %d\n",x0,y0);
+					for (int i = 0; i < 4; i++)
+					{
+						setplane(i);
+						cprintf("Plane %d\n",i);
+						uchar *pixel = getframebufferbase() + planeByteIndex;
+						//uchar pixelByte = *pixel;
+						cprintf("pixel val: %d ",*pixel);
+						printbinary(*pixel);
+						*pixel = *pixel | shiftedBit;
+						cprintf("shifted: %d ",shiftedBit);
+						printbinary(shiftedBit);
+						cprintf("OR'd val: %d ",*pixel);
+						printbinary(*pixel);
+						
+					}
+					cprintf("\n");
+					
+					
+					
+				}
+				else if(getcurrentvideomode() == 0x13){
+					uchar *pixel = P2V(0xA0000 + 320 * y0 + x0);
+					*pixel = hdctable.devices[hdc].colourIndex;
+				}
 				e2 = 2 * err;
 
 				if (e2 >= dy)
@@ -294,4 +390,16 @@ int sys_executedraw(void){
 	
 	
 	return 0;
+}
+
+void printbinary(int n){
+	while (n) {
+		if (n & 1)
+			cprintf("1");
+		else
+			cprintf("0");
+
+		n >>= 1;
+	}
+	cprintf("\n");
 }
